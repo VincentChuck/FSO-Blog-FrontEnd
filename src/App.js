@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -7,9 +7,6 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -62,30 +59,6 @@ const App = () => {
     setPassword('')
   }
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-
-    const newBlog = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl
-    }
-
-    const blogCreatedRes = await blogService.create(newBlog)
-
-    setNewBlogTitle('')
-    setNewBlogAuthor('')
-    setNewBlogUrl('')
-    setBlogs(blogs.concat(blogCreatedRes))
-    console.log(blogCreatedRes.title)
-    if (blogCreatedRes) {
-      setNotification([`a new blog ${blogCreatedRes.title} added`, 'notification'])
-      setTimeout(() => {
-        setNotification([null,null])
-      }, 5000)
-    }
-  }
-
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -134,6 +107,21 @@ const App = () => {
       )
   }
 
+  const createBlogRef = useRef()
+
+  const addBlog = async (blogObject) => {
+    const blogCreatedRes = await blogService.create(blogObject)
+    createBlogRef.current.toggleVisibility()
+    setBlogs(blogs.concat(blogCreatedRes))
+
+    if (blogCreatedRes) {
+      setNotification([`a new blog ${blogCreatedRes.title} added`, 'notification'])
+      setTimeout(() => {
+        setNotification([null,null])
+      }, 5000)
+    }
+  }
+
   if (user === null) {
     return (
       <>
@@ -148,13 +136,8 @@ const App = () => {
         <h2>blogs</h2>
         {notificationDisplay()}
         {userLoggedIn()}
-        <Togglable buttonLabel="new blog">
-          <CreateNewBlog
-            { ... { handleNewBlog,
-              newBlogTitle, setNewBlogTitle,
-              newBlogAuthor, setNewBlogAuthor,
-              newBlogUrl, setNewBlogUrl } }
-          />
+        <Togglable buttonLabel='new blog' ref={createBlogRef}>
+          <CreateNewBlog { ...{ addBlog } } />
         </Togglable>
         {blogDisplay()}
       </>
