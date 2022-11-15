@@ -92,7 +92,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {blogs.sort((a,b) => b.likes - a.likes ).map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={addLike} />
+        <Blog key={blog.id} {...{ blog, addLike, removeBlog, user }}/>
       )}
     </div>
   )
@@ -125,6 +125,11 @@ const App = () => {
   const addLike = async (id, blogObject) => {
     const blogUpdatedRes = await blogService.update(id, blogObject)
     setBlogs(blogs.map(blog => blog.id === id ? blogUpdatedRes : blog))
+  }
+
+  const removeBlog = async (id) => {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
   }
 
   if (user === null) {
