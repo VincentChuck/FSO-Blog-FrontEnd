@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import CreateNewBlog from './components/CreateNewBlog'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -122,39 +124,6 @@ const App = () => {
     </div>
   )
 
-  const createNewBlog= () => (
-    <>
-      <h2>create new</h2>
-      <form onSubmit={handleNewBlog}>
-        <div>
-          title:
-          <input
-            type='text'
-            value={newBlogTitle}
-            name='title'
-            onChange={({ target }) => setNewBlogTitle(target.value)} />
-        </div>
-        <div>
-          author:
-          <input
-            type='text'
-            value={newBlogAuthor}
-            name='author'
-            onChange={({ target }) => setNewBlogAuthor(target.value)} />
-        </div>
-        <div>
-          url:
-          <input
-            type='url'
-            value={newBlogUrl}
-            name='url'
-            onChange={({ target }) => setNewBlogUrl(target.value)} />
-        </div>
-        <button type='submit'>create</button>
-      </form>
-    </>
-  )
-
   const notificationDisplay = () => {
     return notification[0] === null ?
       null :
@@ -179,7 +148,14 @@ const App = () => {
         <h2>blogs</h2>
         {notificationDisplay()}
         {userLoggedIn()}
-        {createNewBlog()}
+        <Togglable buttonLabel="new blog">
+          <CreateNewBlog
+            { ... { handleNewBlog,
+              newBlogTitle, setNewBlogTitle,
+              newBlogAuthor, setNewBlogAuthor,
+              newBlogUrl, setNewBlogUrl } }
+          />
+        </Togglable>
         {blogDisplay()}
       </>
     )
