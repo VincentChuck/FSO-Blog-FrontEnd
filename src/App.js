@@ -92,7 +92,9 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {blogs.sort((a,b) => b.likes - a.likes ).map(blog =>
-        <Blog key={blog.id} {...{ blog, addLike, removeBlog, user }}/>
+        <Blog key={blog.id} {...{ blog, addLike, removeBlog }}
+          showDel={blog.user.username===user.username}
+        />
       )}
     </div>
   )
@@ -115,7 +117,7 @@ const App = () => {
     setBlogs(blogs.concat(blogCreatedRes))
 
     if (blogCreatedRes) {
-      setNotification([`a new blog ${blogCreatedRes.title} added`, 'notification'])
+      setNotification([`a new blog ${blogCreatedRes.title} by ${blogCreatedRes.author} added`, 'notification'])
       setTimeout(() => {
         setNotification([null,null])
       }, 5000)
