@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 const blog = {
-  'title': 'test authorization to delete blog',
+  'title': 'testing blog component',
   'author': 'VC',
   'url': 'http://testfrontend.com',
   'likes': 111,
