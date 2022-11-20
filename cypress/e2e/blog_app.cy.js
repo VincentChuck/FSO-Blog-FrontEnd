@@ -22,14 +22,17 @@ describe('Blog app', function() {
       cy.get('#username').type('sampleUser')
       cy.get('#password').type('samplePassword')
       cy.get('#login-button').click()
-      cy.contains('sampleUser logged-in')
+      cy.contains('sampleUser logged in')
     })
 
-    it('fails with correct credentials', function() {
-      cy.get('#username').type('sampleUser1')
-      cy.get('#password').type('samplePassword')
+    it('fails with wrong credentials', function() {
+      cy.get('#username').type('sampleUser')
+      cy.get('#password').type('samplePassword1')
       cy.get('#login-button').click()
-      cy.contains('wrong username or password')
+      cy.get('.error')
+        .should('contain','wrong username or password')
+        .and('have.css','color', 'rgb(255, 0, 0)')
+      cy.get('html').should('not.contain', 'sampleUser logged in')
     })
   })
 })

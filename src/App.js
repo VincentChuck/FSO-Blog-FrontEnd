@@ -87,7 +87,7 @@ const App = () => {
 
   const userLoggedIn = () => (
     <p>
-      {user.username} logged-in
+      {user.username} logged in
       <button onClick={handleLogout}>logout</button>
     </p>
   )
