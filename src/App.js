@@ -43,6 +43,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setNotification(['logged in successfully','notification'])
+      setTimeout(() => {
+        setNotification([null,null])
+      }, 5000)
     } catch (exception) {
       setNotification(['wrong username or password','error'])
       setTimeout(() => {
@@ -64,26 +68,26 @@ const App = () => {
       <div>
         username
         <input
+          id='username'
           type='text'
           value={username}
-          name='Username'
           onChange={({ target }) => setUsername(target.value)} />
       </div>
       <div>
         password
         <input
+          id='password'
           type='password'
           value={password}
-          name='Password'
           onChange={({ target }) => setPassword(target.value)} />
       </div>
-      <button type='submit'>login</button>
+      <button id="login-button" type='submit'>login</button>
     </form>
   )
 
   const userLoggedIn = () => (
     <p>
-      {user.name} logged-in
+      {user.username} logged-in
       <button onClick={handleLogout}>logout</button>
     </p>
   )
@@ -112,12 +116,17 @@ const App = () => {
   const createBlogRef = useRef()
 
   const addBlog = async (blogObject) => {
-    const blogCreatedRes = await blogService.create(blogObject)
-    createBlogRef.current.toggleVisibility()
-    setBlogs(blogs.concat(blogCreatedRes))
+    try{
+      const blogCreatedRes = await blogService.create(blogObject)
+      createBlogRef.current.toggleVisibility()
+      setBlogs(blogs.concat(blogCreatedRes))
 
-    if (blogCreatedRes) {
       setNotification([`a new blog ${blogCreatedRes.title} by ${blogCreatedRes.author} added`, 'notification'])
+      setTimeout(() => {
+        setNotification([null,null])
+      }, 5000)
+    } catch (exception) {
+      setNotification([`${exception.response.data.error}`, 'error'])
       setTimeout(() => {
         setNotification([null,null])
       }, 5000)
