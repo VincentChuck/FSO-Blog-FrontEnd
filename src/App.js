@@ -20,7 +20,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappuser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -37,7 +37,7 @@ const App = () => {
       })
 
       window.localStorage.setItem(
-        'loggedBlogappuser', JSON.stringify(user)
+        'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
@@ -56,7 +56,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappuser')
+    window.localStorage.removeItem('loggedBlogappUser')
     blogService.setToken(null)
     setUser(null)
     setUsername('')

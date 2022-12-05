@@ -21,6 +21,7 @@ const Blog = ({ blog, addLike, removeBlog, showDel }) => {
   const handleLike = () => {
     const newBlog = {
       ...blog,
+      user: blog.user.id,
       likes: blog.likes + 1
     }
     addLike(blog.id, newBlog)
@@ -46,7 +47,7 @@ const Blog = ({ blog, addLike, removeBlog, showDel }) => {
         <span> {blog.author} </span>
         <button onClick={toggleVisibility}>hide</button>
         <span style={{ display:'block' }}> {blog.url} </span>
-        likes {blog.likes} <button onClick={handleLike}>like</button>
+        likes <span className='likes'>{blog.likes}</span> <button onClick={handleLike} className='like'>like</button>
         <span style={{ display:'block' }}> {blog.user.username} </span>
         {showDel ?
           <button onClick={handleDelete}>remove</button> :

@@ -11,6 +11,12 @@ describe('Blog app', function() {
     url: 'http://sampleblog.com'
   }
 
+  let blog1 = {
+    title: 'second blog',
+    author: 'sampleUser',
+    url: 'http://sampleblog1.com'
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     cy.request('POST', 'http://localhost:3003/api/users', user)
@@ -26,7 +32,6 @@ describe('Blog app', function() {
 
   describe('Login', function() {
     it('succeeds with correct credentials', function() {
-      console.log(this.currentUser)
       cy.get('#username').type(user.username)
       cy.get('#password').type(user.password)
       cy.get('#login-button').click()
@@ -46,7 +51,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.login({ username: user.username, password: user.password})
+      cy.login({ username: user.username, password: user.password })
     })
 
     it('A blog can be created', function() {
@@ -59,6 +64,29 @@ describe('Blog app', function() {
       cy.get('.notification').contains(blog.title)
       cy.should('not.contain', '.error')
       cy.get('.blogs').contains(blog.title)
+    })
+
+    describe('and some blogs exist', function () {
+      beforeEach(function() {
+        cy.createBlog(blog)
+        cy.createBlog(blog1)
+      })
+
+      it('one of those can be liked', function () {
+        cy.intercept({ method: 'PUT', url: '*/blogs/*' }).as('likeReq')
+        cy.contains(blog1.title).parent().contains('button','view').click()
+        cy.contains(blog1.url).parent().as('blogExpanded')
+          .find('.likes').then((likes) => {
+            const likesBef = parseFloat(likes.text())
+            cy.get('@blogExpanded').find('button:contains("like")').click()
+            cy.wait('@likeReq').then(() => {
+                cy.get('@blogExpanded').find('.likes').then((likes) => {
+                  const likesAft = parseFloat(likes.text())
+                  expect(likesAft).to.eq(likesBef + 1)
+                })
+              })
+          })
+      })
     })
   })
 })
