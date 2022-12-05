@@ -93,13 +93,15 @@ const App = () => {
   )
 
   const blogDisplay = () => (
-    <div className='blogs'>
+    <div>
       <h2>blogs</h2>
-      {blogs.sort((a,b) => b.likes - a.likes ).map(blog =>
-        <Blog key={blog.id} {...{ blog, addLike, removeBlog }}
-          showDel={blog.user.username===user.username}
-        />
-      )}
+      <div className='blogs'>
+        {blogs.sort((a,b) => b.likes - a.likes ).map(blog =>
+          <Blog key={blog.id} {...{ blog, addLike, removeBlog }}
+            showDel={blog.user.username===user.username}
+          />
+        )}
+      </div>
     </div>
   )
 

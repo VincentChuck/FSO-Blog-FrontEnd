@@ -34,7 +34,7 @@ const Blog = ({ blog, addLike, removeBlog, showDel }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
 
       <div style={hideWhenVisible} className='defaultView'>
         <span> {blog.title} </span>
