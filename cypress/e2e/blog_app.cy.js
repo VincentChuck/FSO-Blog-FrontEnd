@@ -5,6 +5,12 @@ describe('Blog app', function() {
       password: 'samplePassword' 
   }
 
+  let user1 = {
+      name: 'Second User',
+      username: 'userNumberTwo',
+      password: 'someOtherPassword' 
+  }
+
   let blog = {
     title: 'sample blog',
     author: 'sampleUser',
@@ -86,6 +92,27 @@ describe('Blog app', function() {
                 })
               })
           })
+      })
+
+      it('they can be deleted by user who created them', function () {
+        cy.intercept({ method: 'DELETE', url: '*/blogs/*' }).as('deleteReq')
+        cy.contains(blog1.title).parent().contains('button','view').click()
+        cy.contains(blog1.url).parent().as('blogExpanded')
+          .find('button:contains("remove")').click()
+        cy.on('window:confirm', (str) => {
+          expect(str).to.eq(`Remove ${blog1.title}?`)
+          return true
+        })
+        cy.get('html').should('not.contain', blog1.title)
+      })
+
+      it('they cannot be deleted by other users', function() {
+        cy.request('POST', 'http://localhost:3003/api/users', user1)
+        cy.get('button:contains("logout")').click()
+        cy.login({ username: user1.username, password: user1.password })
+        cy.contains(blog1.title).parent().contains('button','view').click()
+        cy.contains(blog1.url).parent()
+          .should('not.contain', 'button:contains("remove")')
       })
     })
   })
