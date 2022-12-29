@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 const Blog = ({ blog, addLike, removeBlog, showDel }) => {
   const blogStyle = {
@@ -6,57 +6,55 @@ const Blog = ({ blog, addLike, removeBlog, showDel }) => {
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  };
 
-  const [blogVisible, setBlogVisible] = useState(false)
+  const [blogVisible, setBlogVisible] = useState(false);
 
-  const hideWhenVisible = { display: blogVisible ? 'none' : '' }
-  const showWhenVisible = { display: blogVisible ? '' : 'none' }
+  const hideWhenVisible = { display: blogVisible ? 'none' : '' };
+  const showWhenVisible = { display: blogVisible ? '' : 'none' };
 
   const toggleVisibility = () => {
-    setBlogVisible(!blogVisible)
-  }
+    setBlogVisible(!blogVisible);
+  };
 
   const handleLike = () => {
     const newBlog = {
       ...blog,
       user: blog.user.id,
-      likes: blog.likes + 1
-    }
-    addLike(blog.id, newBlog)
-  }
+      likes: blog.likes + 1,
+    };
+    addLike(blog.id, newBlog);
+  };
 
   const handleDelete = () => {
     if (window.confirm(`Remove ${blog.title}?`)) {
-      removeBlog(blog.id)
+      removeBlog(blog.id);
     }
-  }
+  };
 
   return (
-    <div style={blogStyle} className='blog'>
-
-      <div style={hideWhenVisible} className='defaultView'>
+    <div style={blogStyle} className="blog">
+      <div style={hideWhenVisible} className="defaultView">
         <span> {blog.title} </span>
         <span> {blog.author} </span>
         <button onClick={toggleVisibility}>view</button>
       </div>
 
-      <div style={showWhenVisible} className='expandedView'>
+      <div style={showWhenVisible} className="expandedView">
         <span> {blog.title} </span>
         <span> {blog.author} </span>
         <button onClick={toggleVisibility}>hide</button>
-        <span style={{ display:'block' }}> {blog.url} </span>
-        likes <span className='likes'>{blog.likes}</span> <button onClick={handleLike} className='like'>like</button>
-        <span style={{ display:'block' }}> {blog.user.username} </span>
-        {showDel ?
-          <button onClick={handleDelete}>remove</button> :
-          null
-        }
+        <span style={{ display: 'block' }}> {blog.url} </span>
+        likes <span className="likes">{blog.likes}</span>{' '}
+        <button onClick={handleLike} className="like">
+          like
+        </button>
+        <span style={{ display: 'block' }}> {blog.user.username} </span>
+        {showDel ? <button onClick={handleDelete}>remove</button> : null}
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;

@@ -44,8 +44,10 @@
     "@testing-library/user-event": "^14.4.3",
     "cypress": "^11.1.0",
     "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jest": "^27.1.5",
-    "eslint-plugin-react": "^7.31.10"
+    "eslint-plugin-react": "^7.31.10",
+    "prettier": "2.8.1"
   }
 }

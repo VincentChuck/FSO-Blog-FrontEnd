@@ -1,24 +1,24 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-const CreateNewBlog= ({ addBlog }) => {
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
+const CreateNewBlog = ({ addBlog }) => {
+  const [newBlogTitle, setNewBlogTitle] = useState('');
+  const [newBlogAuthor, setNewBlogAuthor] = useState('');
+  const [newBlogUrl, setNewBlogUrl] = useState('');
   const handleNewBlog = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const newBlog = {
       title: newBlogTitle,
       author: newBlogAuthor,
-      url: newBlogUrl
-    }
+      url: newBlogUrl,
+    };
 
-    addBlog(newBlog)
+    addBlog(newBlog);
 
-    setNewBlogTitle('')
-    setNewBlogAuthor('')
-    setNewBlogUrl('')
-  }
+    setNewBlogTitle('');
+    setNewBlogAuthor('');
+    setNewBlogUrl('');
+  };
 
   return (
     <>
@@ -27,34 +27,37 @@ const CreateNewBlog= ({ addBlog }) => {
         <div>
           title:
           <input
-            type='text'
+            type="text"
             value={newBlogTitle}
-            name='title'
-            placeholder='title'
-            onChange={({ target }) => setNewBlogTitle(target.value)} />
+            name="title"
+            placeholder="title"
+            onChange={({ target }) => setNewBlogTitle(target.value)}
+          />
         </div>
         <div>
           author:
           <input
-            type='text'
+            type="text"
             value={newBlogAuthor}
-            name='author'
-            placeholder='author'
-            onChange={({ target }) => setNewBlogAuthor(target.value)} />
+            name="author"
+            placeholder="author"
+            onChange={({ target }) => setNewBlogAuthor(target.value)}
+          />
         </div>
         <div>
           url:
           <input
-            type='url'
+            type="url"
             value={newBlogUrl}
-            name='url'
-            placeholder='url'
-            onChange={({ target }) => setNewBlogUrl(target.value)} />
+            name="url"
+            placeholder="url"
+            onChange={({ target }) => setNewBlogUrl(target.value)}
+          />
         </div>
-        <button type='submit'>create</button>
+        <button type="submit">create</button>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default CreateNewBlog
+export default CreateNewBlog;
