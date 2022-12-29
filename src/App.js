@@ -1,16 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { showNotification } from './reducers/notificationReducer';
+
 import Blog from './components/Blog';
-import blogService from './services/blogs';
-import loginService from './services/login';
+import Notification from './components/Notification';
 import CreateNewBlog from './components/CreateNewBlog';
 import Togglable from './components/Togglable';
+
+import blogService from './services/blogs';
+import loginService from './services/login';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState([null, null]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     blogService.getAll().then((initialNotes) => {
@@ -41,15 +48,25 @@ const App = () => {
       setUser(user);
       setUsername('');
       setPassword('');
-      setNotification(['logged in successfully', 'notification']);
-      setTimeout(() => {
-        setNotification([null, null]);
-      }, 5000);
+      dispatch(
+        showNotification(
+          {
+            content: 'logged in successfully',
+            type: 'notification',
+          },
+          5000
+        )
+      );
     } catch (exception) {
-      setNotification(['wrong username or password', 'error']);
-      setTimeout(() => {
-        setNotification([null, null]);
-      }, 5000);
+      dispatch(
+        showNotification(
+          {
+            content: 'wrong username or password',
+            type: 'error',
+          },
+          5000
+        )
+      );
     }
   };
 
@@ -111,12 +128,6 @@ const App = () => {
     </div>
   );
 
-  const notificationDisplay = () => {
-    return notification[0] === null ? null : (
-      <div className={notification[1]}>{notification[0]}</div>
-    );
-  };
-
   const createBlogRef = useRef();
 
   const addBlog = async (blogObject) => {
@@ -125,18 +136,25 @@ const App = () => {
       createBlogRef.current.toggleVisibility();
       setBlogs(blogs.concat(blogCreatedRes));
 
-      setNotification([
-        `a new blog ${blogCreatedRes.title} by ${blogCreatedRes.author} added`,
-        'notification',
-      ]);
-      setTimeout(() => {
-        setNotification([null, null]);
-      }, 5000);
+      dispatch(
+        showNotification(
+          {
+            content: `a new blog ${blogCreatedRes.title} by ${blogCreatedRes.author} added`,
+            type: 'notification',
+          },
+          5000
+        )
+      );
     } catch (exception) {
-      setNotification([`${exception.response.data.error}`, 'error']);
-      setTimeout(() => {
-        setNotification([null, null]);
-      }, 5000);
+      dispatch(
+        showNotification(
+          {
+            content: `${exception.response.data.error}`,
+            type: 'error',
+          },
+          5000
+        )
+      );
     }
   };
 
@@ -154,7 +172,7 @@ const App = () => {
     return (
       <>
         <h2>log in to application</h2>
-        {notificationDisplay()}
+        <Notification />
         {loginForm()}
       </>
     );
@@ -162,7 +180,7 @@ const App = () => {
     return (
       <>
         <h2>blogs</h2>
-        {notificationDisplay()}
+        <Notification />
         {userLoggedIn()}
         <Togglable buttonLabel="new blog" ref={createBlogRef}>
           <CreateNewBlog {...{ addBlog }} />
