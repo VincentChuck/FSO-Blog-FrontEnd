@@ -41,25 +41,9 @@ const App = () => {
       setUsername('');
       setPassword('');
 
-      dispatch(
-        showNotification(
-          {
-            content: 'logged in successfully',
-            type: 'notification',
-          },
-          5000
-        )
-      );
+      notify('logged in successfully');
     } catch (exception) {
-      dispatch(
-        showNotification(
-          {
-            content: 'wrong username or password',
-            type: 'error',
-          },
-          5000
-        )
-      );
+      notify('wrong uesrname or password', 'error');
     }
   };
 
@@ -109,27 +93,14 @@ const App = () => {
     try {
       dispatch(create(blogObject));
       createBlogRef.current.toggleVisibility();
-
-      dispatch(
-        showNotification(
-          {
-            content: `a new blog ${blogObject.title} by ${blogObject.author} added`,
-            type: 'notification',
-          },
-          5000
-        )
-      );
+      notify(`a new blog ${blogObject.title} by ${blogObject.author} added`);
     } catch (exception) {
-      dispatch(
-        showNotification(
-          {
-            content: `${exception.response.data.error}`,
-            type: 'error',
-          },
-          5000
-        )
-      );
+      notify(`${exception.response.data.error}`, 'error');
     }
+  };
+
+  const notify = (message, type = 'info') => {
+    dispatch(showNotification({ content: message, type }, 5000));
   };
 
   if (user === null) {
