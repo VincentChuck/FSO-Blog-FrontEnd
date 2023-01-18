@@ -10,43 +10,37 @@ import Notification from './components/Notification';
 import CreateNewBlog from './components/CreateNewBlog';
 import Togglable from './components/Togglable';
 
-import blogService from './services/blogs';
 import loginService from './services/login';
+import userService from './services/user';
 
 const App = () => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(initializeBlogs());
-  }, [dispatch]);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON);
-      dispatch(setUser(loggedUser));
-      blogService.setToken(loggedUser.token);
+    dispatch(initializeBlogs());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const userFromStorage = userService.getUser();
+    if (userFromStorage) {
+      dispatch(setUser(userFromStorage));
     }
-  }, []);
+  }, [dispatch]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-      blogService.setToken(user.token);
+      const user = await loginService.login({ username, password });
+      userService.setUser(user);
       dispatch(setUser(user));
       setUsername('');
       setPassword('');
+
       dispatch(
         showNotification(
           {
@@ -70,8 +64,7 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser');
-    blogService.setToken(null);
+    userService.clearUser();
     dispatch(setUser(null));
     setUsername('');
     setPassword('');
@@ -147,19 +140,19 @@ const App = () => {
         {loginForm()}
       </>
     );
-  } else {
-    return (
-      <>
-        <h2>blogs</h2>
-        <Notification />
-        {userLoggedIn()}
-        <Togglable buttonLabel="new blog" ref={createBlogRef}>
-          <CreateNewBlog {...{ addBlog }} />
-        </Togglable>
-        <Blogs user={user} />
-      </>
-    );
   }
+
+  return (
+    <>
+      <h2>blogs</h2>
+      <Notification />
+      {userLoggedIn()}
+      <Togglable buttonLabel="new blog" ref={createBlogRef}>
+        <CreateNewBlog {...{ addBlog }} />
+      </Togglable>
+      <Blogs />
+    </>
+  );
 };
 
 export default App;

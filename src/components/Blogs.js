@@ -2,8 +2,9 @@ import { useSelector } from 'react-redux';
 
 import Blog from './Blog';
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
 
   return (
     <div>
