@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { showNotification } from './reducers/notificationReducer';
+import { initializeBlogs, create } from './reducers/blogReducer';
 
-import Blog from './components/Blog';
+import Blogs from './components/Blogs';
 import Notification from './components/Notification';
 import CreateNewBlog from './components/CreateNewBlog';
 import Togglable from './components/Togglable';
@@ -12,18 +13,15 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    blogService.getAll().then((initialNotes) => {
-      setBlogs(initialNotes);
-    });
-  }, []);
+    dispatch(initializeBlogs());
+  }, [dispatch]);
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -110,36 +108,17 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
     </p>
   );
-
-  const blogDisplay = () => (
-    <div>
-      <h2>blogs</h2>
-      <div className="blogs">
-        {blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <Blog
-              key={blog.id}
-              {...{ blog, addLike, removeBlog }}
-              showDel={blog.user.username === user.username}
-            />
-          ))}
-      </div>
-    </div>
-  );
-
   const createBlogRef = useRef();
 
   const addBlog = async (blogObject) => {
     try {
-      const blogCreatedRes = await blogService.create(blogObject);
+      dispatch(create(blogObject));
       createBlogRef.current.toggleVisibility();
-      setBlogs(blogs.concat(blogCreatedRes));
 
       dispatch(
         showNotification(
           {
-            content: `a new blog ${blogCreatedRes.title} by ${blogCreatedRes.author} added`,
+            content: `a new blog ${blogObject.title} by ${blogObject.author} added`,
             type: 'notification',
           },
           5000
@@ -156,16 +135,6 @@ const App = () => {
         )
       );
     }
-  };
-
-  const addLike = async (id, blogObject) => {
-    const blogUpdatedRes = await blogService.update(id, blogObject);
-    setBlogs(blogs.map((blog) => (blog.id === id ? blogUpdatedRes : blog)));
-  };
-
-  const removeBlog = async (id) => {
-    await blogService.remove(id);
-    setBlogs(blogs.filter((blog) => blog.id !== id));
   };
 
   if (user === null) {
@@ -185,7 +154,7 @@ const App = () => {
         <Togglable buttonLabel="new blog" ref={createBlogRef}>
           <CreateNewBlog {...{ addBlog }} />
         </Togglable>
-        {blogDisplay()}
+        <Blogs user={user} />
       </>
     );
   }

@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { like, remove } from '../reducers/blogReducer';
 
-const Blog = ({ blog, addLike, removeBlog, showDel }) => {
+const Blog = ({ blog, showDel }) => {
+  const dispatch = useDispatch();
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -19,31 +23,24 @@ const Blog = ({ blog, addLike, removeBlog, showDel }) => {
   };
 
   const handleLike = () => {
-    const newBlog = {
-      ...blog,
-      user: blog.user.id,
-      likes: blog.likes + 1,
-    };
-    addLike(blog.id, newBlog);
+    dispatch(like(blog));
   };
 
   const handleDelete = () => {
     if (window.confirm(`Remove ${blog.title}?`)) {
-      removeBlog(blog.id);
+      dispatch(remove(blog));
     }
   };
 
   return (
     <div style={blogStyle} className="blog">
       <div style={hideWhenVisible} className="defaultView">
-        <span> {blog.title} </span>
-        <span> {blog.author} </span>
+        {blog.title} {blog.author}
         <button onClick={toggleVisibility}>view</button>
       </div>
 
       <div style={showWhenVisible} className="expandedView">
-        <span> {blog.title} </span>
-        <span> {blog.author} </span>
+        {blog.title} {blog.author}
         <button onClick={toggleVisibility}>hide</button>
         <span style={{ display: 'block' }}> {blog.url} </span>
         likes <span className="likes">{blog.likes}</span>{' '}
