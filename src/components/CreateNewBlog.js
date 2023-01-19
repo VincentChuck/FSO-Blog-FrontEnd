@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const CreateNewBlog = ({ addBlog }) => {
+const CreateNewBlog = ({ createBlog }) => {
   const [newBlogTitle, setNewBlogTitle] = useState('');
   const [newBlogAuthor, setNewBlogAuthor] = useState('');
   const [newBlogUrl, setNewBlogUrl] = useState('');
@@ -13,7 +13,7 @@ const CreateNewBlog = ({ addBlog }) => {
       url: newBlogUrl,
     };
 
-    addBlog(newBlog);
+    createBlog(newBlog);
 
     setNewBlogTitle('');
     setNewBlogAuthor('');

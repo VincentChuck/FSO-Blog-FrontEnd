@@ -73,7 +73,7 @@ describe('Blog app', function () {
       cy.get('input[name="url"]').type(blog.url);
       cy.contains('button', 'create').click();
 
-      cy.contains('.notification', blog.title);
+      cy.contains('.info', blog.title);
       cy.should('not.contain', '.error');
       cy.contains('.blogs', blog.title);
     });
