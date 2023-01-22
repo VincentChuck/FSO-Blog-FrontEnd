@@ -8,7 +8,6 @@ const Blogs = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
       <div className="blogs">
         {[...blogs]
           .sort((a, b) => b.likes - a.likes)

@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { showNotification } from './reducers/notificationReducer';
 import { initializeBlogs, create } from './reducers/blogReducer';
 import { setUser } from './reducers/userReducer';
 
-import Blogs from './components/Blogs';
+import HomeView from './components/HomeView';
+import UsersView from './components/UsersView';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
-import CreateNewBlog from './components/CreateNewBlog';
-import Togglable from './components/Togglable';
 
 import loginService from './services/login';
 import userService from './services/user';
@@ -70,18 +70,26 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
+    <Router>
       <div>
-        {user.username} logged in
-        <button onClick={logout}>logout</button>
+        <h2>blogs</h2>
+        <Notification />
+        <div>
+          {user.username} logged in
+          <button onClick={logout}>logout</button>
+        </div>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomeView createBlogRef={createBlogRef} createBlog={createBlog} />
+            }
+          />
+          <Route path="/users" element={<UsersView />} />
+        </Routes>
       </div>
-      <Togglable buttonLabel="new blog" ref={createBlogRef}>
-        <CreateNewBlog {...{ createBlog }} />
-      </Togglable>
-      <Blogs />
-    </div>
+    </Router>
   );
 };
 
