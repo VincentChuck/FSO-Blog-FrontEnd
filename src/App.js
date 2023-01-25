@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import { initializeBlogs, create } from './reducers/blogReducer';
 import { initializeUsers } from './reducers/usersReducer';
@@ -72,15 +72,27 @@ const App = () => {
     );
   }
 
+  const padding = {
+    paddingRight: 5,
+  };
+
   return (
     <Router>
       <div>
-        <h2>blogs</h2>
-        <Notification />
-        <div>
+        <div style={{ backgroundColor: 'lightGray', padding: '5px' }}>
+          <Link style={padding} to="/">
+            blogs
+          </Link>
+          <Link style={padding} to="/users">
+            users
+          </Link>
           {user.username} logged in
           <button onClick={logout}>logout</button>
         </div>
+
+        <Notification />
+
+        <h2>blog app</h2>
 
         <Routes>
           <Route path="/blogs/:id" element={<Blog />} />
