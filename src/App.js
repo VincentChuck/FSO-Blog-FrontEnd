@@ -9,6 +9,7 @@ import { notify } from './reducers/notificationReducer';
 
 import HomeView from './components/HomeView';
 import UsersView from './components/UsersView';
+import Blog from './components/Blog';
 import User from './components/User';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
@@ -82,6 +83,7 @@ const App = () => {
         </div>
 
         <Routes>
+          <Route path="/blogs/:id" element={<Blog />} />
           <Route path="/users/:id" element={<User />} />
           <Route path="/users" element={<UsersView />} />
           <Route

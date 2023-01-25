@@ -1,26 +1,13 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { like, remove } from '../reducers/blogReducer';
+import { useParams } from 'react-router-dom';
 
-const Blog = ({ blog, showDel }) => {
+const Blog = () => {
+  const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
+
+  const blogID = useParams().id;
   const dispatch = useDispatch();
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  };
-
-  const [blogVisible, setBlogVisible] = useState(false);
-
-  const hideWhenVisible = { display: blogVisible ? 'none' : '' };
-  const showWhenVisible = { display: blogVisible ? '' : 'none' };
-
-  const toggleVisibility = () => {
-    setBlogVisible(!blogVisible);
-  };
 
   const handleLike = () => {
     dispatch(like(blog));
@@ -32,24 +19,25 @@ const Blog = ({ blog, showDel }) => {
     }
   };
 
-  return (
-    <div style={blogStyle} className="blog">
-      <div style={hideWhenVisible} className="defaultView">
-        {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>view</button>
-      </div>
+  const blog = blogs.find((blog) => blog.id === blogID);
+  if (!blog) {
+    return null;
+  }
 
-      <div style={showWhenVisible} className="expandedView">
-        {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>hide</button>
-        <span style={{ display: 'block' }}> {blog.url} </span>
-        likes <span className="likes">{blog.likes}</span>{' '}
-        <button onClick={handleLike} className="like">
-          like
-        </button>
-        <span style={{ display: 'block' }}> {blog.user.username} </span>
-        {showDel ? <button onClick={handleDelete}>remove</button> : null}
-      </div>
+  const showDel = blog.user.username === user.username;
+
+  return (
+    <div>
+      <h2>{blog.title}</h2>
+      <a href={blog.url} style={{ display: 'block' }}>
+        {blog.url}
+      </a>
+      <span className="likes">{blog.likes} likes</span>{' '}
+      <button onClick={handleLike} className="like">
+        like
+      </button>
+      <span style={{ display: 'block' }}>added by {blog.user.username}</span>
+      {showDel ? <button onClick={handleDelete}>remove</button> : null}
     </div>
   );
 };
