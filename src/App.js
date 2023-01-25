@@ -2,12 +2,14 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { showNotification } from './reducers/notificationReducer';
 import { initializeBlogs, create } from './reducers/blogReducer';
+import { initializeUsers } from './reducers/usersReducer';
 import { setUser } from './reducers/userReducer';
+import { notify } from './reducers/notificationReducer';
 
 import HomeView from './components/HomeView';
 import UsersView from './components/UsersView';
+import User from './components/User';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 
@@ -28,6 +30,10 @@ const App = () => {
     if (userFromStorage) {
       dispatch(setUser(userFromStorage));
     }
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(initializeUsers());
   }, [dispatch]);
 
   const login = async (username, password) => {
@@ -56,10 +62,6 @@ const App = () => {
     }
   };
 
-  const notify = (message, type = 'info') => {
-    dispatch(showNotification({ content: message, type }, 5000));
-  };
-
   if (user === null) {
     return (
       <>
@@ -80,13 +82,14 @@ const App = () => {
         </div>
 
         <Routes>
+          <Route path="/users/:id" element={<User />} />
+          <Route path="/users" element={<UsersView />} />
           <Route
             path="/"
             element={
               <HomeView createBlogRef={createBlogRef} createBlog={createBlog} />
             }
           />
-          <Route path="/users" element={<UsersView />} />
         </Routes>
       </div>
     </Router>

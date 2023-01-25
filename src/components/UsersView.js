@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react';
-import usersService from '../services/users';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const UsersView = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    usersService.getUsers().then((response) => {
-      setUsers(response);
-    });
-  }, []);
+  const users = useSelector((state) => state.users);
 
   return (
     <div>
@@ -25,7 +19,9 @@ const UsersView = () => {
             .sort((a, b) => b.blogs.length - a.blogs.length)
             .map((user) => (
               <tr key={user.id}>
-                <td>{user.name}</td>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </td>
                 <td>{user.blogs.length}</td>
               </tr>
             ))}

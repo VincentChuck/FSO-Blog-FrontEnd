@@ -27,4 +27,10 @@ export const showNotification = (content, duration) => {
   };
 };
 
+export const notify = (message, type = 'info') => {
+  return async (dispatch) => {
+    dispatch(showNotification({ content: message, type }, 5000));
+  };
+};
+
 export default notificationSlice.reducer;
