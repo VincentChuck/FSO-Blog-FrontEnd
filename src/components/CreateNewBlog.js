@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { create } from '../reducers/blogReducer';
+import { useDispatch } from 'react-redux';
 
-const CreateNewBlog = ({ createBlog }) => {
+const CreateNewBlog = ({ createBlogRef }) => {
+  const dispatch = useDispatch();
   const [newBlogTitle, setNewBlogTitle] = useState('');
   const [newBlogAuthor, setNewBlogAuthor] = useState('');
   const [newBlogUrl, setNewBlogUrl] = useState('');
@@ -11,6 +14,11 @@ const CreateNewBlog = ({ createBlog }) => {
       title: newBlogTitle,
       author: newBlogAuthor,
       url: newBlogUrl,
+    };
+
+    const createBlog = async (blogObject) => {
+      dispatch(create(blogObject));
+      createBlogRef.current.toggleVisibility();
     };
 
     createBlog(newBlog);
