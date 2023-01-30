@@ -9,7 +9,7 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload;
     },
-    likeBlog(state, action) {
+    updateBlog(state, action) {
       const updatedBlog = action.payload;
       return state.map((a) => (a.id === updatedBlog.id ? updatedBlog : a));
     },
@@ -24,7 +24,7 @@ const blogSlice = createSlice({
   },
 });
 
-export const { setBlogs, addBlog, likeBlog, removeBlog } = blogSlice.actions;
+export const { setBlogs, addBlog, updateBlog, removeBlog } = blogSlice.actions;
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -40,7 +40,7 @@ export const like = (blog) => {
       likes: blog.likes + 1,
     };
     const updatedBlog = await blogService.update(blog.id, likedBlog);
-    dispatch(likeBlog(updatedBlog));
+    dispatch(updateBlog(updatedBlog));
   };
 };
 
@@ -56,6 +56,25 @@ export const create = (blog) => {
       const newBlog = await blogService.create(blog);
       dispatch(addBlog(newBlog));
       dispatch(notify(`a new blog ${blog.title} by ${blog.author} added`));
+    } catch (exception) {
+      dispatch(notify(exception.response.data.error, 'error'));
+    }
+  };
+};
+
+export const addComment = (blog, comment) => {
+  return async (dispatch) => {
+    try {
+      const commentJson = { comment };
+      const addedComment = await blogService.postComment(blog.id, commentJson);
+      const updatedBlog = {
+        ...blog,
+        comments: blog.comments
+          ? [...blog.comments, addedComment]
+          : [addComment],
+      };
+      dispatch(updateBlog(updatedBlog));
+      dispatch(notify(`comment '${comment}' added`));
     } catch (exception) {
       dispatch(notify(exception.response.data.error, 'error'));
     }

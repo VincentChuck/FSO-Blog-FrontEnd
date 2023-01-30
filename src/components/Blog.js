@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { like, remove } from '../reducers/blogReducer';
-import { useParams } from 'react-router-dom';
+import { like, remove, addComment } from '../reducers/blogReducer';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Blog = () => {
   const blogs = useSelector((state) => state.blogs);
@@ -8,6 +8,7 @@ const Blog = () => {
 
   const blogID = useParams().id;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLike = () => {
     dispatch(like(blog));
@@ -16,6 +17,7 @@ const Blog = () => {
   const handleDelete = () => {
     if (window.confirm(`Remove ${blog.title}?`)) {
       dispatch(remove(blog));
+      navigate('/');
     }
   };
 
@@ -25,6 +27,13 @@ const Blog = () => {
   }
 
   const showDel = blog.user.username === user.username;
+
+  const handleComment = (event) => {
+    event.preventDefault();
+    const comment = event.target.comment.value;
+    event.target.comment.value = '';
+    dispatch(addComment(blog, comment));
+  };
 
   return (
     <div>
@@ -39,6 +48,10 @@ const Blog = () => {
       <span style={{ display: 'block' }}>added by {blog.user.username}</span>
       {showDel ? <button onClick={handleDelete}>remove</button> : null}
       <h3>comments</h3>
+      <form onSubmit={handleComment}>
+        <input type="text" name="comment" />
+        <button type="submit"> add comment</button>
+      </form>
       <ul>
         {[...blog.comments].map((comment) => (
           <li key={comment.id}>{comment.comment}</li>
