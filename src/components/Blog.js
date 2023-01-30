@@ -38,6 +38,12 @@ const Blog = () => {
       </button>
       <span style={{ display: 'block' }}>added by {blog.user.username}</span>
       {showDel ? <button onClick={handleDelete}>remove</button> : null}
+      <h3>comments</h3>
+      <ul>
+        {[...blog.comments].map((comment) => (
+          <li key={comment.id}>{comment.comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };
