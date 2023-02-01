@@ -26,7 +26,7 @@ const Blog = () => {
     return null;
   }
 
-  const showDel = blog.user.username === user.username;
+  const showDel = user && blog.user.username === user.username;
 
   const handleComment = (event) => {
     event.preventDefault();

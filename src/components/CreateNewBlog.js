@@ -62,7 +62,9 @@ const CreateNewBlog = ({ createBlogRef }) => {
             onChange={({ target }) => setNewBlogUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <button className=" btn-blue" type="submit">
+          create
+        </button>
       </form>
     </>
   );

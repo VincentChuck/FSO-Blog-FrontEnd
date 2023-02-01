@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/userReducer';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(username, password));
+    navigate('/');
   };
 
   return (
@@ -17,8 +20,9 @@ const LoginForm = () => {
       <h2>log in to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          username
+          username{' '}
           <input
+            className="rounded-md"
             id="username"
             type="text"
             value={username}
@@ -26,15 +30,16 @@ const LoginForm = () => {
           />
         </div>
         <div>
-          password
+          password{' '}
           <input
+            className="rounded-md"
             id="password"
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" type="submit">
+        <button id="login-button" className=".btn-blue" type="submit">
           login
         </button>
       </form>

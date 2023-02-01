@@ -30,37 +30,53 @@ const App = () => {
     }
   }, [dispatch]);
 
-  if (user === null) {
-    return (
-      <>
-        <Notification />
-        <LoginForm />
-      </>
-    );
-  }
+  // if (user === null) {
+  //   return (
+  //     <>
+  //       <Notification />
+  //       <LoginForm />
+  //     </>
+  //   );
+  // }
 
   return (
     <Router>
       <div>
-        <div style={{ backgroundColor: 'lightGray', padding: '5px' }}>
-          <Link style={{ paddingRight: 5 }} to="/">
-            blogs
-          </Link>
-          <Link style={{ paddingRight: 5 }} to="/users">
-            users
-          </Link>
-          {user.username} logged in
-          <button onClick={() => dispatch(logout())}>logout</button>
+        <div>
+          <h1 className="text-3xl text-white font-bold bg-[#ff4500]">
+            blog app
+          </h1>
+          <div className="">
+            <Link style={{ paddingRight: 5 }} to="/">
+              blogs
+            </Link>
+            <Link style={{ paddingRight: 5 }} to="/users">
+              users
+            </Link>
+          </div>
+          <div>
+            {user ? (
+              <div>
+                <div>{user.username} logged in</div>
+                <button onClick={() => dispatch(logout())} className="btn-red">
+                  logout
+                </button>
+              </div>
+            ) : (
+              <Link style={{ paddingRight: 5 }} to="/login">
+                login
+              </Link>
+            )}
+          </div>
         </div>
 
         <Notification />
-
-        <h2>blog app</h2>
 
         <Routes>
           <Route path="/blogs/:id" element={<Blog />} />
           <Route path="/users/:id" element={<User />} />
           <Route path="/users" element={<UsersView />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route
             path="/"
             element={<HomeView createBlogRef={createBlogRef} />}

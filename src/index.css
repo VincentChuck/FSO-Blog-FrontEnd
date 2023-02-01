@@ -1,3 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h2 {
+    @apply text-xl;
+  }
+}
+@layer components {
+  .btn-red {
+    @apply bg-red-500 hover:bg-red-700 text-white py-0.5 px-1 rounded;
+  }
+  .btn-blue {
+    @apply bg-[#0079d3] hover:bg-[#0079d3b3] text-white py-0.5 px-1 rounded;
+  }
+}
+
 .error {
   color: red;
   background: lightgrey;
