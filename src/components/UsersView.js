@@ -6,7 +6,7 @@ const UsersView = () => {
 
   return (
     <div>
-      <h2>Users</h2>
+      <h1>Users</h1>
       <table>
         <tbody>
           <tr>

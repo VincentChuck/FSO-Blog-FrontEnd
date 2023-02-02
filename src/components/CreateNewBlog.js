@@ -32,37 +32,31 @@ const CreateNewBlog = ({ createBlogRef }) => {
     <>
       <h2>create new</h2>
       <form onSubmit={handleNewBlog}>
-        <div>
-          title:
-          <input
-            type="text"
-            value={newBlogTitle}
-            name="title"
-            placeholder="title"
-            onChange={({ target }) => setNewBlogTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            type="text"
-            value={newBlogAuthor}
-            name="author"
-            placeholder="author"
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            type="url"
-            value={newBlogUrl}
-            name="url"
-            placeholder="url"
-            onChange={({ target }) => setNewBlogUrl(target.value)}
-          />
-        </div>
-        <button className=" btn-blue" type="submit">
+        <input
+          type="text"
+          value={newBlogTitle}
+          name="title"
+          placeholder="title"
+          className="input"
+          onChange={({ target }) => setNewBlogTitle(target.value)}
+        />
+        <input
+          type="text"
+          value={newBlogAuthor}
+          name="author"
+          placeholder="author"
+          className="input"
+          onChange={({ target }) => setNewBlogAuthor(target.value)}
+        />
+        <input
+          type="url"
+          value={newBlogUrl}
+          name="url"
+          placeholder="url"
+          className="input"
+          onChange={({ target }) => setNewBlogUrl(target.value)}
+        />
+        <button className="btn-blue mt-1" type="submit">
           create
         </button>
       </form>

@@ -1,16 +1,8 @@
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Blogs = () => {
   const blogs = useSelector((state) => state.blogs);
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  };
 
   return (
     <div>
@@ -18,9 +10,13 @@ const Blogs = () => {
         {[...blogs]
           .sort((a, b) => b.likes - a.likes)
           .map((blog) => (
-            <div key={blog.id} style={blogStyle}>
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            </div>
+            <NavLink
+              key={blog.id}
+              to={`/blogs/${blog.id}`}
+              className="block bg-white py-3 px-2 mb-2 rounded-sm max-w-screen-md border border-gray-400 hover:border-gray-500"
+            >
+              {blog.title}
+            </NavLink>
           ))}
       </div>
     </div>

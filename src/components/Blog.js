@@ -37,20 +37,31 @@ const Blog = () => {
 
   return (
     <div>
-      <h2>{blog.title}</h2>
+      <h1>{blog.title}</h1>
       <a href={blog.url} style={{ display: 'block' }}>
         {blog.url}
       </a>
       <span className="likes">{blog.likes} likes</span>{' '}
-      <button onClick={handleLike} className="like">
+      <button onClick={handleLike} className="btn-blue">
         like
       </button>
       <span style={{ display: 'block' }}>added by {blog.user.username}</span>
-      {showDel ? <button onClick={handleDelete}>remove</button> : null}
-      <h3>comments</h3>
+      {showDel && (
+        <button onClick={handleDelete} className="btn-red">
+          remove
+        </button>
+      )}
+      <h2>Comments</h2>
       <form onSubmit={handleComment}>
-        <input type="text" name="comment" />
-        <button type="submit"> add comment</button>
+        <input
+          type="text"
+          placeholder=" What are your thoughts?"
+          name="comment"
+          className="input w-48 h-6"
+        />
+        <button type="submit" className="btn-blue mt-1">
+          Comment
+        </button>
       </form>
       <ul>
         {[...blog.comments].map((comment) => (

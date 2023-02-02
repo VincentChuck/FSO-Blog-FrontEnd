@@ -5,11 +5,8 @@ import Blogs from './Blogs';
 const HomeView = ({ createBlogRef }) => {
   return (
     <div>
-      <Togglable
-        buttonLabel="new blog"
-        ref={createBlogRef}
-        className="btn-blue"
-      >
+      <h1>Blogs</h1>
+      <Togglable buttonLabel="new blog" ref={createBlogRef}>
         <CreateNewBlog {...{ createBlogRef }} />
       </Togglable>
       <Blogs />

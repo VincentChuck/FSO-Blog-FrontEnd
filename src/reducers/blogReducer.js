@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import blogService from '../services/blogs';
 import { notify } from '../reducers/notificationReducer';
+import { logout } from './userReducer';
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -57,7 +58,10 @@ export const create = (blog) => {
       dispatch(addBlog(newBlog));
       dispatch(notify(`a new blog ${blog.title} by ${blog.author} added`));
     } catch (exception) {
-      dispatch(notify(exception.response.data.error, 'error'));
+      if (exception.response.data.error === 'token expired') {
+        dispatch(notify('Login expired, please login again', 'error'));
+        dispatch(logout());
+      }
     }
   };
 };
